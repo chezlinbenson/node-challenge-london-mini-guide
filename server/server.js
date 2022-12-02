@@ -24,6 +24,21 @@ function cities(city) {
   }
 }
 
+function categories(category) {
+  switch (category) {
+    case "pharmacies":
+      return "pharmacies";
+    case "colleges":
+      return "colleges";
+    case "hospitals":
+      return "hospitals";
+    case "doctors":
+      return "doctors";
+    default:
+      return null;
+  }
+}
+
 // Level 100
 app.get("/", (req, res) => {
   res.send({
@@ -59,45 +74,63 @@ app.get("/hospitals", (req, res) => {
 // Level 300
 // Return data based on any city that is passed to the server
 
-app.get("/:city/pharmacies", (req, res) => {
-  console.log(req.method, req.url);
-  let city = req.params.city;
-  let cityCheck = cities(city);
-  if (cityCheck) {
-    res.send(cityCheck.pharmacies);
-  } else {
-    res.status(404).send("Error invalid city");
-  }
-});
+// app.get("/:city/pharmacies", (req, res) => {
+//   console.log(req.method, req.url);
+//   let city = req.params.city;
+//   let cityCheck = cities(city);
+//   if (cityCheck) {
+//     res.send(cityCheck.pharmacies);
+//   } else {
+//     res.status(404).send("Error invalid city");
+//   }
+// });
 
-app.get("/:city/colleges", (req, res) => {
-  console.log(req.method, req.url);
-  let city = req.params.city;
-  let cityCheck = cities(city);
-  if (cityCheck) {
-    res.send(cityCheck.colleges);
-  } else {
-    res.status(404).send("Error invalid city");
-  }
-});
+// app.get("/:city/colleges", (req, res) => {
+//   console.log(req.method, req.url);
+//   let city = req.params.city;
+//   let cityCheck = cities(city);
+//   if (cityCheck) {
+//     res.send(cityCheck.colleges);
+//   } else {
+//     res.status(404).send("Error invalid city");
+//   }
+// });
 
-app.get("/:city/doctors", (req, res) => {
-  console.log(req.method, req.url);
-  let city = req.params.city;
-  let cityCheck = cities(city);
-  if (cityCheck) {
-    res.send(cityCheck.doctors);
-  } else {
-    res.status(404).send("Error invalid city");
-  }
-});
+// app.get("/:city/doctors", (req, res) => {
+//   console.log(req.method, req.url);
+//   let city = req.params.city;
+//   let cityCheck = cities(city);
+//   if (cityCheck) {
+//     res.send(cityCheck.doctors);
+//   } else {
+//     res.status(404).send("Error invalid city");
+//   }
+// });
 
-app.get("/:city /hospitals", (req, res) => {
+// app.get("/:city /hospitals", (req, res) => {
+//   console.log(req.method, req.url);
+//   let city = req.params.city;
+//   let cityCheck = cities(city);
+//   if (cityCheck) {
+//     res.send(cityCheck.hospitals);
+//   } else {
+//     res.status(404).send("Error invalid city");
+//   }
+// });
+
+// Level 500
+app.get("/:city/:category", (req, res) => {
   console.log(req.method, req.url);
   let city = req.params.city;
+  let category = req.params.category.toLowerCase();
   let cityCheck = cities(city);
+  let categoryCheck = categories(category);
   if (cityCheck) {
-    res.send(cityCheck.hospitals);
+    if (categoryCheck) {
+      res.send(cityCheck[categoryCheck]);
+    } else {
+      res.status(404).send("Error invalid category");
+    }
   } else {
     res.status(404).send("Error invalid city");
   }
