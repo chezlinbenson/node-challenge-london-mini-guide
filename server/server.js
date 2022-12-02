@@ -1,9 +1,28 @@
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
+
 let stratfordData = require("../data/Stratford.json");
+let heathrowData = require("../data/Heathrow.json");
+let harrowData = require("../data/Harrow.json");
+
+// let cities = require("../data/Stratford.json");
 
 app.use(express.json());
+
+// Create a Function that receives a city from the client and send back the city data
+function cities(city) {
+  switch (city.toUpperCase()) {
+    case "HARROW":
+      return harrowData;
+    case "HEATHROW":
+      return heathrowData;
+    case "STRATFORD":
+      return stratfordData;
+    default:
+      return null;
+  }
+}
 
 // Level 100
 app.get("/", (req, res) => {
@@ -32,9 +51,56 @@ app.get("/hospitals", (req, res) => {
   console.log(req.method, req.url);
   res.send(stratfordData.hospitals);
 });
-app.get("/stratford", (req, res) => {
+// app.get("/stratford", (req, res) => {
+//   console.log(req.method, req.url);
+//   res.send(stratfordData.stratford);
+// });
+
+// Level 300
+// Return data based on any city that is passed to the server
+
+app.get("/:city/pharmacies", (req, res) => {
   console.log(req.method, req.url);
-  res.send(stratfordData.stratford);
+  let city = req.params.city;
+  let cityCheck = cities(city);
+  if (cityCheck) {
+    res.send(cityCheck.pharmacies);
+  } else {
+    res.status(404).send("Error invalid city");
+  }
+});
+
+app.get("/:city/colleges", (req, res) => {
+  console.log(req.method, req.url);
+  let city = req.params.city;
+  let cityCheck = cities(city);
+  if (cityCheck) {
+    res.send(cityCheck.colleges);
+  } else {
+    res.status(404).send("Error invalid city");
+  }
+});
+
+app.get("/:city/doctors", (req, res) => {
+  console.log(req.method, req.url);
+  let city = req.params.city;
+  let cityCheck = cities(city);
+  if (cityCheck) {
+    res.send(cityCheck.doctors);
+  } else {
+    res.status(404).send("Error invalid city");
+  }
+});
+
+app.get("/:city /hospitals", (req, res) => {
+  console.log(req.method, req.url);
+  let city = req.params.city;
+  let cityCheck = cities(city);
+  if (cityCheck) {
+    res.send(cityCheck.hospitals);
+  } else {
+    res.status(404).send("Error invalid city");
+  }
 });
 
 app.listen(port, () => {
